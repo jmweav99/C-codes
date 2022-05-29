@@ -1,0 +1,284 @@
+// Given rook pieces on a chess board, determines which rook pieces can attack each other.
+// [1][][]
+// [][][2]
+// [3][][]
+// rook pieces 1 and 3 can attack each other, 2 cannot reach either
+
+#include <stdio.h>
+#include <stdlib.h>
+// struct definitions
+// use typedef to avoid having to use struct keyword as often
+typedef struct piece
+{
+    int rank, file, id;
+} Piece;
+typedef struct rank
+{
+    int location;
+    int num_pieces;
+    int capacity;
+    Piece *array;
+} Rank;
+typedef struct rankArrayList
+{
+    int size, cap;
+    Rank **ranks;
+} RankArrayList;
+Piece *createPiece(int rank, int file, int id)
+{
+    Piece *newPiece = (Piece *)calloc(1, sizeof(Piece));
+    newPiece->rank = rank;
+    newPiece->file = file;
+    newPiece->id = id;
+    return newPiece;
+}
+void checkAttacks(RankArrayList *board, Piece p)
+{
+    // printf("Checking attacks for piece with id %d\n", p.id);
+    if (board == NULL)
+        return;
+    int i, j;
+    int numAttacks = 0;
+    int closestLeftFile = -1;
+    int closestRightFile = -1;
+    int closestAboveRank = -1;
+    int closestBelowRank = -1;
+    int closestLeftFileId = -1;
+    int closestRightFileId = -1;
+    int closestBelowRankId = -1;
+    int closestAboveRankId = -1;
+    // find attacks
+    for (i = 0; i < board->size; i++)
+    {
+        Rank *pieceRank = board->ranks[i];
+        // check rank
+        if (pieceRank->location == p.rank)
+        {
+            for (j = 0; j < pieceRank->num_pieces; j++)
+            {
+                Piece curPiece = pieceRank->array[j];
+                if (curPiece.id != p.id)
+                {
+                    // find nearest piece on the left
+                    if (curPiece.file < p.file && (curPiece.file > closestLeftFile 
+|| closestLeftFile == -1))
+                    {
+                        closestLeftFile = curPiece.file;
+                        closestLeftFileId = curPiece.id;
+                    }
+                    // find nearest piece on the right
+                    if (curPiece.file > p.file && (curPiece.file < closestRightFile
+|| closestRightFile == -1))
+                    {
+                        closestRightFile = curPiece.file;
+                        closestRightFileId = curPiece.id;
+                    }
+                }
+            }
+        }
+        // check file
+        else
+        {
+            for (j = 0; j < pieceRank->num_pieces; j++)
+            {
+                Piece curPiece = pieceRank->array[j];
+                if (curPiece.id != p.id && curPiece.file == p.file)
+                {
+                    // find nearest piece below
+                    if (curPiece.rank > p.rank && (curPiece.rank < closestBelowRank
+|| closestBelowRank == -1))
+                    {
+                        closestBelowRank = curPiece.rank;
+                        closestBelowRankId = curPiece.id;
+                    }
+                    // find nearest piece above
+                    if (curPiece.rank < p.rank && (curPiece.rank > closestAboveRank
+|| closestAboveRank == -1))
+                    {
+                        closestAboveRank = curPiece.rank;
+                        closestAboveRankId = curPiece.id;
+                    }
+                }
+            }
+        }
+    }
+    // print attacks found
+    if (closestLeftFileId != -1)
+    {
+        numAttacks++;
+    }
+    if (closestRightFileId != -1)
+    {
+        numAttacks++;
+    }
+    if (closestAboveRankId != -1)
+    {
+        numAttacks++;
+    }
+    if (closestBelowRankId != -1)
+    {
+        numAttacks++;
+    }
+    printf("%d", numAttacks);
+    if (closestLeftFileId != -1)
+    {
+        printf(" %d", closestLeftFileId);
+    }
+    if (closestRightFileId != -1)
+    {
+        printf(" %d", closestRightFileId);
+    }
+    if (closestAboveRankId != -1)
+    {
+        printf(" %d", closestAboveRankId);
+    }
+    if (closestBelowRankId != -1)
+    {
+        printf(" %d", closestBelowRankId);
+    }
+    printf("\n");
+}
+void expandRank(Rank *curRank)
+{
+    // similar to expandBoard
+    if (curRank == NULL)
+        return;
+    if (curRank->capacity == 0)
+    {
+        curRank->capacity = 1;
+        curRank->array = (Piece *)calloc(1, sizeof(Piece));
+        return;
+    }
+    // set new max capacity to 2 * original
+    int newCapacity = curRank->capacity * 2;
+    curRank->capacity = newCapacity;
+    // double size of rank
+    curRank->array = (Piece *)realloc(curRank->array, newCapacity * sizeof(Piece));
+}
+void addPieceToRank(Rank *rank, Piece *newPiece)
+{
+    if (rank == NULL || newPiece == NULL)
+        return;
+    if (rank->num_pieces == rank->capacity)
+    {
+        expandRank(rank);
+    }
+    rank->array[rank->num_pieces].id = newPiece->id;
+    rank->array[rank->num_pieces].rank = newPiece->rank;
+    rank->array[rank->num_pieces].file = newPiece->file;
+    rank->num_pieces += 1;
+}
+void cleanRank(Rank *curRank)
+{
+    if (curRank == NULL)
+        return;
+    // free rank arrray
+    free(curRank->array);
+    free(curRank);
+}
+Rank *createRank()
+{
+    // calloc space for new rank so that location, numPieces, and capacity
+    // will be 0 and array will be null
+    Rank *newRank = (Rank *)calloc(1, sizeof(Rank));
+    return newRank;
+}
+RankArrayList *createBoard()
+{
+    // calloc space for new board so that size and cap will be 0
+    // and ranks will be null
+    RankArrayList *board = (RankArrayList *)calloc(1, sizeof(RankArrayList));
+    return board;
+}
+void expandBoard(RankArrayList *board)
+{
+    // check that board is not null
+    if (board == NULL)
+        return;
+    if (board->cap == 0)
+    {
+        board->cap = 1;
+        board->ranks = (Rank **)calloc(1, sizeof(Rank *));
+        board->ranks[0] = createRank();
+        return;
+    }
+    // set new max capacity to 2 * original
+    int newCap = board->cap * 2;
+    board->cap = newCap;
+    // double size of board
+    board->ranks = (Rank **)realloc(board->ranks, newCap * sizeof(Rank *));
+    int i;
+    for (i = board->size; i < board->cap; i++)
+    {
+        board->ranks[i] = createRank();
+    }
+}
+void addPieceToBoard(RankArrayList *board, Piece *newPiece)
+{
+    if (board == NULL || newPiece == NULL)
+        return;
+    int i;
+    for (i = 0; i < board->size; i++)
+    {
+        if ((board->ranks[i])->location == newPiece->rank)
+        {
+            addPieceToRank(board->ranks[i], newPiece);
+            return;
+        }
+    }
+    if (board->size == board->cap)
+    {
+        expandBoard(board);
+    }
+    (board->ranks[board->size])->location = newPiece->rank;
+    addPieceToRank(board->ranks[board->size], newPiece);
+    board->size += 1;
+}
+void cleanBoard(RankArrayList *board)
+{
+    if (board == NULL)
+        return;
+    // free the board inside out
+    int i;
+    for (i = 0; i < board->size; i++)
+    {
+        cleanRank(board->ranks[i]);
+        // free(board->ranks[i].array);
+    }
+    free(board->ranks);
+    free(board);
+}
+int main(void)
+{
+    int i, j, n;
+    int r, c;
+    RankArrayList *board = createBoard();
+    scanf("%d", &n);
+    // add pieces to board
+    for (i = 0; i < n; i++)
+    {
+        Piece pieceToAdd;
+        pieceToAdd.id = i + 1;
+        scanf("%d %d", &pieceToAdd.rank, &pieceToAdd.file);
+        addPieceToBoard(board, &pieceToAdd);
+    }
+    // print results
+    for (i = 0; i < board->size; i++)
+    {
+        Rank *curRank = board->ranks[i];
+        for (j = 0; j < curRank->num_pieces; j++)
+        {
+            Piece p = curRank->array[j];
+            checkAttacks(board, p);
+        }
+    }
+    // free memory
+    cleanBoard(board);
+    return 0;
+}            checkAttacks(board, p);
+        }
+    }
+    // free memory
+    cleanBoard(board);
+    return 0;
+}
