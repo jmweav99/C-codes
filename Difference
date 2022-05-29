@@ -1,0 +1,16 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+int main(){ 
+  int num1, num2, total, dif, product; 
+  printf("Enter first number:\n"); 
+  scanf("%d", &num1); 
+  printf("\nEnter second number:\n"); 
+  scanf("%d",&num2); 
+  total=num1 + num2; 
+  dif=num1-num2; 
+  product=num1*num2; 
+ 
+  printf("Sum: %d\nProduct: %d\nDifference: %d\n", total,product,dif); 
+  system("PAUSE"); 
+  return 0; 
+} 
