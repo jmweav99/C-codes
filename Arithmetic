@@ -1,0 +1,29 @@
+int main(){ 
+  int a, b, sum, sub, mult, div, mod; 
+  printf("Enter integer a:"); 
+  scanf("%d", &a); 
+  printf("Enter integer b:"); 
+  scanf("%d", &b); 
+ 
+  //math 
+  sum = a + b; 
+  sub = a - b; 
+  mult = a*b; 
+ 
+  printf("a+b = %d + %d = %d\n", a, b, sum); 
+  printf("a-b = %d - %d = %d\n", a, b, sub); 
+  printf("a*b = %d * %d = %d\n", a, b, mult); 
+  //check to see if second number is 0 if it is, prints error 
+  if(b!=0){ 
+  
+    div = a/b; 
+    mod = a%b; 
+    printf("a/b = %d / %d = %d\n", a, b, div); 
+    printf("a%%b = %d %% %d = %d\n", a, b, mod); 
+  } 
+  else{ 
+    printf("a/b = %d / %d = Cannot divide by zero \n", a, b); 
+    printf("a%%b = %d %% %d = Cannot divide by zero", a, b); 
+  } 
+ return 0; 
+} 
