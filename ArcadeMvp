@@ -1,0 +1,203 @@
+// Determines players scores and ranks them as MVP in the arcade, uses a queue system to hold players
+// as only a set can be in the arcade at a time
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+//basic struct set up for linked list
+struct node{
+  int money;
+  char * name;
+  struct node *next;
+};
+//linked list is empty so set the head to null for any emtpy checks we may need to 
+do
+struct node *head = NULL;
+//for creating the stack
+struct node *top;
+struct node * b;
+//intitalization of the MVP stack
+void MVP_start(){
+  top = NULL;
+}
+//functions for pop and push
+void push(char * name, int t_money){//t_money is just to see who 
+  struct node * tmp;
+    if(top==NULL){//condition for first person to enter arcade, they'll 
+automatically be the mvp
+      tmp = (struct node *)malloc(sizeof(struct node));
+      tmp->name=(char *)malloc(20*(sizeof(char)));
+      strcpy(tmp->name,name);
+      tmp -> money = t_money;
+      tmp -> next = top;
+      top = tmp;
+    }
+    else if(top->money <= t_money){//actual condintion to determine mvp, pushed the
+past mvp down
+      tmp = (struct node *)malloc(sizeof(struct node));
+      tmp->name=(char *)malloc(20*(sizeof(char)));
+      strcpy(tmp->name,name);
+      tmp -> money = t_money;
+      tmp -> next = top;
+      top = tmp;
+    }
+  tmp=top;
+}
+char * pop(int flag){//takes in flag to determine if the person leaving is the same
+as the mvp
+  if(top==NULL){
+    char * error = "error";
+    return error;
+  }
+  if(flag==0){//if person leaving isnt mvp then just pops stack 
+    return top->name;
+  }
+  //if person leaving is mvp then it pops mvp sets the person under to the mvp and 
+frees 
+  struct node * tmp;
+  char * hold;
+  tmp = top;
+  hold = tmp -> name;
+  top = top -> next;
+  free(tmp);
+  return hold;
+}
+void ListCreate(int money, char * name){
+  struct node *temp, *ptr;
+  temp = (struct node *)malloc(sizeof(struct node));
+  //basic check for going through the nodes
+  if(temp == NULL){
+    exit(0);
+  }
+  temp->money = money;
+  temp->name=(char *)malloc(20*(sizeof(char)));
+  strcpy(temp->name,name);
+  temp->next = NULL;
+  if(head==NULL){
+    head = temp; //next link is already null so setting head to it as well
+  }
+  else{
+    ptr = head;//holding the heads address
+    while(ptr->next != NULL){//loop through
+      ptr=ptr->next;//points to the next node
+    }
+    ptr -> next = temp; //the next node pointer = address that temps holding
+  }
+  push(temp->name,temp->money);
+}
+struct node * removeLast(){//removes last of linked list along with determining if 
+the mvp is the person leaving
+  struct node * temp = head;
+  struct node * n;
+  int flag = 0;
+  if(head == NULL){//basic empty check
+    return NULL;
+  }
+  if(head->next==NULL){
+    flag = 1;
+    free(head);
+    head = NULL;
+  }
+  else{
+    while(temp->next != NULL){
+      n = temp;
+      temp = temp -> next;
+    }
+    if(strcmp(top->name,n->next->name)==0){
+      flag = 1;
+    }
+    free(n->next);
+    n->next = NULL;
+  }  tmp = top;
+  hold = tmp -> name;
+  top = top -> next;
+  free(tmp);
+  return hold;
+}
+void ListCreate(int money, char * name){
+  struct node *temp, *ptr;
+  temp = (struct node *)malloc(sizeof(struct node));
+  //basic check for going through the nodes
+  if(temp == NULL){
+    exit(0);
+  }
+  temp->money = money;
+  temp->name=(char *)malloc(20*(sizeof(char)));
+  strcpy(temp->name,name);
+  temp->next = NULL;
+  if(head==NULL){
+    head = temp; //next link is already null so setting head to it as well
+  }
+  else{
+    ptr = head;//holding the heads address
+    while(ptr->next != NULL){//loop through
+      ptr=ptr->next;//points to the next node
+    }
+    ptr -> next = temp; //the next node pointer = address that temps holding
+  }
+  push(temp->name,temp->money);
+}
+struct node * removeLast(){//removes last of linked list along with determining if 
+the mvp is the person leaving
+  struct node * temp = head;
+  struct node * n;
+  int flag = 0;
+  if(head == NULL){//basic empty check
+    return NULL;
+  }
+  if(head->next==NULL){
+    flag = 1;
+    free(head);
+    head = NULL;
+  }
+  else{
+    while(temp->next != NULL){
+      n = temp;
+      temp = temp -> next;
+    }
+    if(strcmp(top->name,n->next->name)==0){
+      flag = 1;
+    }
+    free(n->next);
+    n->next = NULL;
+  }
+  pop(flag);
+  return NULL;
+}
+int main(void) {
+  int choice;
+  int money;
+  char * mvp;
+  char * name;
+  MVP_start();
+  name = (char*)malloc(20*sizeof(char));
+  mvp = (char*)malloc(20*sizeof(char));
+  //printf("%d %d %s", choice, money, name);
+  do{
+    //switch case for repeating 
+    scanf("%d",&choice);
+    switch(choice){
+      case 0:
+        break; 
+      case 1:
+        scanf("%d %s", &money,name);//scans in money and name and then sends it to 
+the linked list creations
+        ListCreate(money, name);
+        break;
+      case 2:
+        removeLast();
+        break;
+      case 3:
+        mvp = pop(0);//error handling 
+        if(strcmp(mvp, "error")==0){//if theres no one in the arcade then it 
+automatically goes back to menu choices
+          break;
+        }
+        printf("%s\n", mvp);//prints mvp for given people in arcade
+        break;
+      default:
+        choice = 0; 
+        break;
+    }
+  }while (choice != 0);
+  return 0;
+}
