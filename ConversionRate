@@ -1,0 +1,148 @@
+// based of name converts to coins and tokens to get a value, sorts the values and prints based on size.
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+//node structures
+struct node{
+  //node data
+  int tokens;
+  int coins;
+  long long int units;
+  char name[20];
+  //node link
+  struct node *next;
+};
+//setting the head to empty globally 
+struct node * head = NULL;
+//prototypes for converting, node creation, memory clearing, sorting 
+void Converter(int a, int b);
+void ListCreate();
+void Flusher(struct node **Array,int n);
+void merge(struct node **Array,int start,int mid, int end);
+struct node **ArrayMaker(int n);
+void Merger_Start(struct node **Array, int start,int end);
+
+int main(void) {
+  int n,i,a,b;
+  scanf("%d",&n);//number of people 
+  for(i=0;i<n;i++){
+    ListCreate();//creates a node for each person
+  }
+  scanf("%d %d", &a, &b);//conversion rate input
+  Converter(a,b);//converts to units for easy compare
+  Flusher(ArrayMaker(n),n);//first calls the Array maker function(contains print 
+functions) that gets sorted then flushes everything to clean memory
+  return 0;
+}
+
+void ListCreate(){
+  struct node *temp, *ptr;
+  temp = (struct node *)malloc(sizeof(struct node));
+  //basic check for going through the nodes
+  if(temp == NULL){
+    exit(0);
+  }
+  scanf("%s %d %d", temp->name, &temp->tokens, &temp->coins);
+  temp->next = NULL;
+  if(head==NULL){
+    head = temp; //next link is already null so setting head to it as well
+  }
+  else{
+    ptr = head;//holding the heads address
+    while(ptr->next != NULL){//loop through
+      ptr=ptr->next;//points to the next node
+    }
+    ptr -> next = temp; //the next node pointer = address that temps holding
+  }
+}
+void Converter(int a, int b){
+  struct node *temp;
+  //basic check for going through the nodes
+  if(head == NULL){
+    return;
+  }
+  else{
+    temp = head;
+    while(temp != NULL){
+      temp->units =(temp->tokens * b) + (temp->coins * a);
+      temp = temp->next;
+    }
+  }
+}
+//comparision function for two people used in merge call to compare two people
+int Compare(struct node * a, struct  node * b){
+  if(a->units > b->units){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
+//Function to create array of structs
+struct node **ArrayMaker(int n){
+  int counter =0;
+  struct node *temp;
+  struct node **Array = (struct node**)malloc(sizeof(struct node)*n); 
+  if(head == NULL){
+    return NULL;
+  }
+  else{
+    temp = head;
+    while(temp != NULL){
+      Array[counter] = temp;
+      temp=temp->next;
+      counter++;
+      }
+    }
+    //Once the array is made the merge function gets called to sort the array and 
+then prints the sorted array
+    Merger_Start(Array,0,n-1);
+    for(int i=0;i<n;i++){
+        printf("%s\n",Array[i]->name);
+    }
+    return Array;
+}
+void merge(struct node **Array,int start,int mid, int end){
+  int size = end - start +1; //n = size 
+  struct node **temp =(struct node **)malloc(size * sizeof(struct node));
+  int Pos = 0;
+  int L_Pos = start;
+  int R_Pos = mid + 1;
+  while(L_Pos <= mid && R_Pos <= end){
+    if(Compare(Array[L_Pos], Array[R_Pos])){
+      temp[Pos ++] = Array[L_Pos ++];
+    }
+    else{
+      temp[Pos ++] = Array[R_Pos ++];
+    }
+  }
+  while(L_Pos <= mid){
+    temp[Pos ++] = Array[L_Pos ++];
+  }
+  while(R_Pos <= end){
+    temp[Pos ++] = Array[R_Pos ++];
+  }
+  
+  for(Pos = 0; Pos < size; ++Pos){
+    Array[start+Pos] = temp[Pos];
+  }
+  free(temp);
+}
+void Merger_Start(struct node **Array, int start,int end){
+  //uses recurssion to split array
+  if(start < end){
+    int mid = (start + end) / 2;
+    Merger_Start(Array, start, mid);
+    Merger_Start(Array, mid+1, end);
+    merge(Array, start, mid, end);
+  }
+  return;
+}
+void Flusher(struct node **Array, int n){
+  //frees each index of the array
+  for(int i =0; i<n;i++){
+    free(Array[i]);
+  }
+  //frees the whole array
+  free(Array);
+}
