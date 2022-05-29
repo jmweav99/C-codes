@@ -1,3 +1,4 @@
+// Takes two strings as input, compares the strings to see which string is 'greater', or equal.
 #include <stdio.h> 
 #include <string.h> 
  
