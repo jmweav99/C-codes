@@ -1,3 +1,4 @@
+// Determines if a value is positive or negative, then determines if the integer is a multiple of 2, 5 or neither.
 #include <stdio.h> 
  
 int main(){ 
