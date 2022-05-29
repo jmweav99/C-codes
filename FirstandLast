@@ -1,0 +1,50 @@
+// prints the first and last letter of a first and last name
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define MAX 100000
+int main(void)
+{
+    int lines;
+    int temp;
+    int i; //for 'for loop'
+    char names[MAX + 1];
+    char prntnames[MAX + 1];
+    char **twodarray;
+    scanf("%d", &lines); //user input for n lines
+    twodarray = malloc(lines * sizeof(char *));
+    for (i = 0; i < lines; i++)
+    {
+        twodarray[i] = malloc(1000000);
+    }
+    gets(names);
+    for (i = 0; i < lines; i++)
+    {
+        gets(names);
+        temp = strlen(names); //storing word length
+        int count = 0;
+        for (int j = 0; j <= temp; j++)
+        {
+            if (j == 0 || names[j + 1] == '\0' || names[j + 1] == ' ' || names[j - 
+1] == ' ')
+            { //Using spaces and null characters as flags for first and last letter
+                prntnames[count] = names[j];
+                count++;
+            }
+        }
+        strcpy(twodarray[i], prntnames);
+        //puts(prntnames);
+    }
+    /* end of program print */
+    for (i = 0; i < lines; i++)
+    {
+        printf("%s\n", twodarray[i]);
+    }
+    //freeing each line of allocated space
+    for (i = 0; i < lines; i++)
+    {
+        free(twodarray[i]);
+    }
+    free(twodarray);//freeing outer loop
+    return 0;
+}
