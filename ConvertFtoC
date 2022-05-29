@@ -1,0 +1,13 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+int main() { 
+  int temp; 
+  float fahr; 
+  float cels; 
+  printf("Enter the temperature in Fahrenheit:"); 
+  scanf("%d", &temp); 
+  fahr = temp;  
+  cels =((fahr-32)*5)/9; 
+  printf("%d degrees in Fahrenheit is %.1f degrees in Celsius\n", temp, cels); 
+  return 0; 
+} 
