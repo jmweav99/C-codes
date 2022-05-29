@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(void){
+	char answer1, answer2, answer3;
+	int package1, package2, package3, ip;
+	int count=0;
+	float cost;
+	float total=0;
+	
+	printf("Welcome to AMCD Hosting Inc. \n");
+	printf("Would you like to subscribe to Web Hosting service? (Y or N):");
+	scanf(" %c", &answer1);
+	if(answer1=='Y' || answer1=='y'){
+		count++;
+		printf("Choose package 1, 2, or 3:");
+		scanf("%d", &package1);
+		printf("\nChoose IP type: Shared (1) or Dedicated(2):");
+		scanf("%d", &ip);
+			}
+			
+			
+	printf("\nWould you like to subscribe to Email Marketing Service? (Y or N):");
+	scanf(" %c", &answer2);
+	if(answer2=='Y' || answer2=='y'){
+		count++;
+		printf("\nChoose package 1, 2, or 3:");
+		scanf("%d", &package2);
+	}
+	
+	
+	
+	printf("\nWould you like to subscribe to Internet Marketing? (Y or N):");
+	scanf(" %c", &answer3);
+	if(answer3=='Y' || answer3=='y'){
+		count++;
+		printf("\nChoose package 1 or 2:");
+		scanf("%d", &package3);
+	}
+	
+	
+	printf("\n----------------------------------------------------------------------------");
+	printf("\nAMCD HOSTING INC Bill Details");
+	printf("\n----------------------------------------------------------------------------");
+	printf("\n%-20s%20s%20s", "Service", "Package", "Cost");
+	
+	if(answer1=='Y' || answer1=='y'){
+		if(package1==1){
+			cost=29.99;
+		}
+		else if(package1==2){
+			cost=39.99;
+		}
+		else{
+			cost=49.99;
+		}
+		printf("\n%-20s%20d%17s%.2f","Web Hosting",package1, "$",cost);	
+		total+=cost;
+	if(ip==1){
+		cost=2.99;
+	}
+	else{
+		cost=6.99;
+	}
+	printf("\n\t%-16s%16d%17s%.2f","Ip Dedicated", ip, "$", cost);
+	total+=cost;
+ 	}
+ 	
+	if(answer2=='Y' || answer2=='y'){
+		if(package2==1){
+			cost=19.99;
+		}		
+		else if(package2==2){
+			cost=29.99;
+		}
+		else{
+			cost=39.99;
+		}
+	printf("\n%-20s%20d%17s%.2f","Email Marketing", package2, "$",cost);
+	total+=cost;	
+	}
+	
+	if(answer3=='Y' || answer3=='y'){
+		if(package3==1){
+			cost=59.99;	
+			}
+		else{
+			cost=99.99;
+		}
+		total+=cost;
+	printf("\n%-20s%20d%17s%.2f", "Internet Marketing", package3, "$", cost);
+	}
+	printf("\n\n%-20s%37s%.2f", "Subtotal:", "$", total);
+	float discount=0;
+	if(count>1){
+		discount=total*.05;
+	}
+	printf("\n%-20s%20s%17s%.2f","Bundle Discount:","5%","$",discount);
+	total-=discount;
+	printf("\n%-20s%37s%.2f","Total Before Tax","$",total);
+	float tax=0.08*total;
+	printf("\n%-20s%20s%17s%.2f","Tax", "8%", "$", tax);
+	total+=tax;
+	printf("\n%-20s%37s%.2f","Amount Due:", "$" ,total);
+	printf("\n---------------------------------------------------------------------------");
+}
