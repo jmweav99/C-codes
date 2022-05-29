@@ -1,0 +1,16 @@
+//Creates header file for GPA
+#ifndef STATLIB_H 
+#define STATLIB_H 
+#include <math.h> /* for sqrt()used in stdDeviation() */ 
+extern double mean(int total, double data[]); 
+extern double min(int total, double data[]); 
+extern double max(int total, double data[]); 
+extern double med(int total, double data[]); 
+extern double vari(int total, double data[]); 
+extern double stddev(int total, double data[]); 
+extern int aboveVal(int total, double data[], double val); 
+extern void sort(int total, double data[]); 
+#ifdef _CH_ 
+#pragma importf "gpafunctions.c" 
+#endif 
+#endif /* STATLIB_H */ 
