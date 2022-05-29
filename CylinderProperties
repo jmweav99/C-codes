@@ -1,0 +1,20 @@
+#include <stdio.h> 
+#define PI 3.14159 
+int main(void){ 
+  float radius, height, vol,area; 
+  FILE *cylinderin=fopen("cylinder_input.data","r"); 
+  FILE *cylinderout=fopen("cylinder_output","w"); 
+  if(cylinderin==NULL || cylinderout==NULL){ 
+    printf("Error with files\n"); 
+  } 
+  while(!feof(cylinderin)){ 
+    fscanf(cylinderin,"%f %f", &radius, &height); 
+    vol=PI*height*radius*radius; 
+    area=(radius+height)*2*PI*radius; 
+    printf("%f %f %f %f\n",radius, height,vol,area); 
+    fprintf(cylinderout,"%f %f %f %f\n",radius,height,vol,area); 
+  } 
+  fclose(cylinderout); 
+  fclose(cylinderin); 
+  return 0; 
+} 
