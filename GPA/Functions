@@ -1,0 +1,99 @@
+#include "Header.h" 
+#include <stdio.h> 
+#include <math.h> 
+ 
+double mean(int total, double data[]){ 
+ double temp,tot; 
+ tot=0; 
+ for(int i=0;i<total;i++){ 
+  tot+=data[i];//finding sum of al data 
+ } 
+ temp=tot/total;//dividing sum by number of data  
+ return temp; // returning temp value when this function is called 
+} 
+ 
+double max(int total, double data[]){ 
+ double max_val; 
+ max_val=data[0]; 
+ for(int i=1;i<total;i++){  //compares the data at array postion 0 to data at position 1 
+  if(data[i]>max_val){ 
+   max_val=data[i]; 
+  } 
+ } 
+ return max_val;//returns max_val if for loop fails 
+} 
+double min(int total, double data[]){ 
+ double min_val; 
+ min_val=data[0]; 
+ for(int i=1;i<total;i++){ //same process used in finding max value 
+  if(data[i]<min_val){ 
+   min_val=data[i]; 
+  } 
+ } 
+ return min_val; 
+} 
+double med(int total, double data[]){//Since even amount of data, need to add array postion 4 
+and 5 and divide by two  
+ double med_val;//cant depend on only using data given, have to check if number of data 
+even or odd 
+ if(total%2!=0){//check to see if total is even if it is divide by 2 to find medium 
+  med_val= data[total/2]; 
+ } 
+ else{ 
+  med_val= (data[(total/2)-1]+data[total/2])/2;//takes the two middle data points 
+adds them then divides by 2 
+ } 
+ return med_val;//returns the medium 
+} 
+ 
+ 
+double vari(int total,double data[]){ 
+ double temp,tot,variance; 
+ temp=mean(total,data);//assigns temp with the mean value 
+ tot=0; 
+ for(int i=0;i<total;i++){ 
+  tot+=(data[i]-temp)*(data[i]-temp);//variance=sum of (x inital-mean)^2 
+ } 
+ variance=tot/(total-1);//divides the sum of x initial-mean squared by total - 1 to find 
+variance 
+ return variance; 
+} 
+double stddev(int total, double data[]){ 
+ double variance; 
+ double stnd; 
+ variance=vari(total, data);//uses my vari function to find variance since its used to 
+find deviation 
+ stnd=sqrt(variance); //uses math.h func to square variance to find deviation 
+ return stnd; 
+} 
+ 
+int aboveVal(int total,double data[], double val){ 
+ int temp=0; 
+ for(int i=0;i<total;i++){ 
+  if(data[i]>=val){ 
+   temp++; 
+  } 
+ } 
+ return temp; 
+} 
+ 
+void sort(int total,double data[]){ 
+ double temp; 
+  int i=0; 
+  int j=0; 
+ int min; 
+ for(i=0;i<total-1;i++){ 
+  min=i; 
+  for(j=i+1;j<total;j++){ 
+   if(data[min]>data[j]){ 
+    min=j; 
+   } 
+  } 
+  if(min!=i){ 
+   temp=data[i]; //Flips data postions in array 
+   data[i]=data[min]; 
+   data[min]=temp; 
+  } 
+   
+ } 
+}
