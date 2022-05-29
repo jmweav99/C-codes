@@ -1,0 +1,36 @@
+#include <stdio.h> 
+#include <string.h> 
+ 
+int main(void) { 
+  int i,j; 
+  int result; 
+  char str1[20]; 
+  char str2[20]; 
+  printf("Enter first string:"); 
+  for(i=0;i<20;i++){ 
+    char c=getchar(); 
+    if(c=='\n'){ 
+      break; 
+    } 
+    str1[i]=c; 
+  } 
+  printf("Enter second string:"); 
+  for(j=0;j<20;j++){ 
+    char c=getchar(); 
+    if(c=='\n'){ 
+      break; 
+    } 
+    str2[j]=c; 
+  } 
+  result=strcmp(str1,str2); 
+  if(result>0){ 
+    printf("First string is greater."); 
+  } 
+  else if(result==0){ 
+    printf("Strings are the same"); 
+  } 
+  else{ 
+    printf("String 1 is less than string 2"); 
+  } 
+return 0; 
+} 
