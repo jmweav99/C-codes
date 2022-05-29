@@ -1,3 +1,4 @@
+// Takes the input of two numbers and outputs the difference
 #include <stdio.h> 
 #include <stdlib.h> 
 int main(){ 
